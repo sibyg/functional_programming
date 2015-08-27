@@ -1,1 +1,4 @@
-# functional_programming
+Functional Programming
+=========================
+
+learning functional programming week by week
