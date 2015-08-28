@@ -1,10 +1,12 @@
 package week3
 
-object Week3 {
+object Week3 extends App {
 
   abstract class IntSet {
     def incl(elem: Int): IntSet
+
     def contains(elem: Int): Boolean
+
     def union(other: IntSet): IntSet
   }
 
@@ -14,6 +16,8 @@ object Week3 {
     override def contains(elem: Int): Boolean = false
 
     override def union(other: IntSet): IntSet = other
+
+    override def toString: String = "_"
   }
 
   class NonEmpty(elem: Int, left: IntSet, right: IntSet) extends IntSet {
@@ -27,7 +31,13 @@ object Week3 {
       else if (x > elem) new NonEmpty(elem, left, right incl x)
       else this
 
-    override def union(other: IntSet): IntSet = ???
+    //TODO understand it...union is calling itself...after every iteration number of sets is decrementing
+    override def union(other: IntSet): IntSet = left union right union other incl elem
+
+    override def toString: String = left + " " + elem + " " + right
   }
+
+  println(new NonEmpty(5, Empty, new NonEmpty(6, Empty, Empty)) union new NonEmpty(3, Empty, Empty))
+
 
 }
