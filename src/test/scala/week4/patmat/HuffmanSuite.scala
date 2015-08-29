@@ -3,6 +3,8 @@ package week4.patmat
 import org.scalatest.FunSuite
 import week4.patmat.Huffman._
 
+import scala.collection.immutable.Nil
+
 class HuffmanSuite extends FunSuite {
 
   trait TestTrees {
@@ -26,8 +28,21 @@ class HuffmanSuite extends FunSuite {
     assert(string2Chars("hello, world") === List('h', 'e', 'l', 'l', 'o', ',', ' ', 'w', 'o', 'r', 'l', 'd'))
   }
 
+  test("times") {
+    assert(times("aba".toList) == List(('a', 2), ('b', 1)))
+  }
+
   test("makeOrderedLeafList for some frequency table") {
     assert(makeOrderedLeafList(List(('t', 2), ('e', 1), ('x', 3))) === List(Leaf('e', 1), Leaf('t', 2), Leaf('x', 3)))
+  }
+
+  test("singleton") {
+    val leafC = Leaf('c', 5)
+    assert(singleton(List(leafC)))
+    val leafD = Leaf('d', 6)
+    assert(singleton(List(Fork(leafC, leafD, List('c','d'), 11))))
+    assert(singleton(List(Fork(leafC, leafD, List('c','d'), 11))))
+    assert(!singleton(List(Leaf('a', 1), Fork(leafC, leafD, List('c','d'), 11))))
   }
 
   test("combine of some leaf list") {
@@ -40,4 +55,6 @@ class HuffmanSuite extends FunSuite {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
+
+
 }

@@ -115,19 +115,29 @@ object Week4 extends App {
 
     def isSum: Boolean
 
+    def isProduct: Boolean
+
     def numValue: Int
 
     def leftOp: Expr
 
     def rightOp: Expr
 
-    def eval(e: Expr): Int = {
-      if (e.isNumber) e.numValue
-      else if (e.isSum) eval(e.leftOp) + eval(e.rightOp)
-      else throw new Error("Unknown expression:" + e)
+    def show(): String = this match {
+      case Num(n) => n.toString
+      case Sum(e1, e2) => "(" + e1.show() + " + " + e2.show + ")"
+      case Prod(e1, e2) => "(" + e1.show() + " * " + e2.show + ")"
+      case Var(x, n) => x + "=" + n
+      case _ => throw new NotImplementedError()
     }
 
-    def show(e: Expr): String = ???
+    def eval(): Int = this match {
+      case Num(n) => n
+      case Sum(e1, e2) => e1.eval() + e2.eval()
+      case Prod(e1, e2) => e1.eval() * e2.eval()
+      case Var(x, n) => n.numValue
+      case _ => throw new NotImplementedError()
+    }
   }
 
   case class Num(n: Int) extends Expr {
@@ -138,6 +148,8 @@ object Week4 extends App {
     override def numValue: Int = n
 
     override def isSum: Boolean = false
+
+    override def isProduct: Boolean = false
 
     override def leftOp: Expr = throw new Error("Num.leftOp")
   }
@@ -152,32 +164,47 @@ object Week4 extends App {
     override def isSum: Boolean = true
 
     override def leftOp: Expr = e1
+
+    override def isProduct: Boolean = false
   }
 
   case class Prod(e1: Expr, e2: Expr) extends Expr {
-    override def isNumber: Boolean = ???
+    override def isNumber: Boolean = false
 
-    override def rightOp: Expr = ???
+    override def rightOp: Expr = e2
+
+    override def numValue: Int = throw new Error("Product.numValue")
+
+    override def isSum: Boolean = false
+
+    override def leftOp: Expr = e1
+
+    override def isProduct: Boolean = true
+  }
+
+  case class Var(x: String, value: Num) extends Expr {
+    override def isNumber: Boolean = false
+
+    override def rightOp: Expr = throw new Error("Var.rightOp")
 
     override def numValue: Int = ???
 
-    override def isSum: Boolean = ???
+    override def isSum: Boolean = false
 
-    override def leftOp: Expr = ???
+    override def leftOp: Expr = throw new Error("Var.leftOp")
+
+    override def isProduct: Boolean = false
   }
 
-  case class Var(n: Number) extends Expr {
-    override def isNumber: Boolean = ???
-
-    override def rightOp: Expr = ???
-
-    override def numValue: Int = ???
-
-    override def isSum: Boolean = ???
-
-    override def leftOp: Expr = ???
-  }
-
-
+  val sumExpr1: Expr = Sum(Num(1), Num(2))
+  val sumExpr2: Expr = Sum(Num(9), Num(8))
+  val prodExpr1: Expr = Prod(Num(3), Num(5))
+  val prodExpr2: Expr = Prod(Num(6), Num(7))
+  val sumOfProd: Expr = Sum(prodExpr1, prodExpr2)
+  val prodOfSum: Expr = Prod(sumExpr1, sumExpr2)
+  println(sumOfProd.show())
+  println(sumOfProd.eval())
+  println(prodOfSum.show())
+  println(prodOfSum.eval())
 
 }

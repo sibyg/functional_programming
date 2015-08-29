@@ -123,4 +123,26 @@ class FunSetSuite extends FunSuite {
       assert(contains(s, 3), "filter 3")
     }
   }
+
+  test("for all elements") {
+    new TestSets {
+      val x = forall(union(s1, s2), x => x > 2)
+      val y = forall(union(s3, s2), x => x > 1)
+      assert(!x)
+      assert(y)
+    }
+  }
+  
+  test("exits") {
+    new TestSets {
+      val x = exists(union(s1, s2), x=> x > 1)
+      assert(x)
+    }
+  }
+  
+  test("map") {
+    new TestSets {
+      assert(contains(map(s1, x=> 3),3))
+    }
+  }
 }
