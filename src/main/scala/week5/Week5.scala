@@ -48,4 +48,15 @@ object Week5 extends App {
   }
 
   println("Merge sort=" + msort(numbers)((x, y) => x < y))
+
+
+  def sum(xs: List[Int]) = 0 :: xs reduceLeft ((x, y) => x + y)
+
+  def product(xs: List[Int]) = 1 :: xs reduceRight ((x, y) => x * y)
+
+  println(sum(numbers))
+  println(product(numbers))
+
+  println ((numbers foldLeft 0)(_ + _))
+  println ((numbers foldRight 1)(_ * _))
 }
